@@ -11,26 +11,26 @@ public class TypeSetterProvider implements InfoWrapperProvider<TypeSetter> {
     @Override
     public List<InfoWrapper<TypeSetter>> create() {
         return List.of(
-                new InfoWrapper<>("fully random", new DefaultTypeSetter()),
-                new InfoWrapper<>("randomize 10%",
+                new InfoWrapper<TypeSetter>("fully random", new DefaultTypeSetter()),
+                new InfoWrapper<TypeSetter>("randomize 10%",
                         (position, velocity, type, nTypes) -> Math.random() < 0.1 ? mapType(Math.random(), nTypes) : type
                 ),
-                new InfoWrapper<>("slices",
+                new InfoWrapper<TypeSetter>("slices",
                         (position, velocity, type, nTypes) -> mapType(0.5 * position.x + 0.5, nTypes)
                 ),
-                new InfoWrapper<>("onion",
+                new InfoWrapper<TypeSetter>("onion",
                         (position, velocity, type, nTypes) -> mapType(position.length(), nTypes)
                 ),
-                new InfoWrapper<>("rotate",
+                new InfoWrapper<TypeSetter>("rotate",
                         (position, velocity, type, nTypes) -> (type + 1) % nTypes
                 ),
-                new InfoWrapper<>("flip",
+                new InfoWrapper<TypeSetter>("flip",
                         (position, velocity, type, nTypes) -> nTypes - 1 - type
                 ),
-                new InfoWrapper<>("more of first",
+                new InfoWrapper<TypeSetter>("more of first",
                         (position, velocity, type, nTypes) -> mapType(Math.random() * Math.random(), nTypes)
                 ),
-                new InfoWrapper<>("kill still",
+                new InfoWrapper<TypeSetter>("kill still",
                         (position, velocity, type, nTypes) -> velocity.length() < 0.01 ? nTypes - 1 : type
                 )
         );

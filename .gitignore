@@ -5,3 +5,6 @@ out/
 
 .vscode/
 bin/
+jre/
+lib/
+*.exe

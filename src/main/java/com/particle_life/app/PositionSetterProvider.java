@@ -15,30 +15,30 @@ class PositionSetterProvider implements InfoWrapperProvider<PositionSetter> {
     @Override
     public List<InfoWrapper<PositionSetter>> create() {
         return List.of(
-                new InfoWrapper<>("uniform", new DefaultPositionSetter()),
-                new InfoWrapper<>("uniform circle", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("uniform", new DefaultPositionSetter()),
+                new InfoWrapper<PositionSetter>("uniform circle", (position, type, nTypes) -> {
                     double angle = Math.random() * 2 * Math.PI;
                     double radius = Math.sqrt(Math.random());
                     position.x = Math.cos(angle) * radius;
                     position.y = Math.sin(angle) * radius;
                 }),
-                new InfoWrapper<>("centered", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("centered", (position, type, nTypes) -> {
                     position.x = random.nextGaussian() * 0.3f;
                     position.y = random.nextGaussian() * 0.3f;
                 }),
-                new InfoWrapper<>("centered circle", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("centered circle", (position, type, nTypes) -> {
                     double angle = Math.random() * 2 * Math.PI;
                     double radius = Math.random();
                     position.x = Math.cos(angle) * radius;
                     position.y = Math.sin(angle) * radius;
                 }),
-                new InfoWrapper<>("ring", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("ring", (position, type, nTypes) -> {
                     double angle = Math.random() * 2 * Math.PI;
                     double radius = 0.9 + 0.02 * random.nextGaussian();
                     position.x = Math.cos(angle) * radius;
                     position.y = Math.sin(angle) * radius;
                 }),
-                new InfoWrapper<>("type battle", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("type battle", (position, type, nTypes) -> {
 
                     double centerAngle = type / (double) nTypes * 2 * Math.PI;
                     double centerRadius = 0.5f;
@@ -48,7 +48,7 @@ class PositionSetterProvider implements InfoWrapperProvider<PositionSetter> {
                     position.x = centerRadius * Math.cos(centerAngle) + Math.cos(angle) * radius;
                     position.y = centerRadius * Math.sin(centerAngle) + Math.sin(angle) * radius;
                 }),
-                new InfoWrapper<>("type wheel", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("type wheel", (position, type, nTypes) -> {
 
                     double centerAngle = type / (double) nTypes * 2 * Math.PI;
                     double centerRadius = 0.3f;
@@ -57,12 +57,12 @@ class PositionSetterProvider implements InfoWrapperProvider<PositionSetter> {
                     position.x = centerRadius * Math.cos(centerAngle) + random.nextGaussian() * individualRadius;
                     position.y = centerRadius * Math.sin(centerAngle) + random.nextGaussian() * individualRadius;
                 }),
-                new InfoWrapper<>("line", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("line", (position, type, nTypes) -> {
                     position.x = (2 * random.nextDouble() - 1);
 
                     position.y = (2 * random.nextDouble() - 1) * 0.15f;
                 }),
-                new InfoWrapper<>("spiral", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("spiral", (position, type, nTypes) -> {
                     double maxRotations = 2;
                     double f = random.nextDouble();
                     double angle = maxRotations * 2 * Math.PI * f;
@@ -72,7 +72,7 @@ class PositionSetterProvider implements InfoWrapperProvider<PositionSetter> {
                     position.x = radius * Math.cos(angle);
                     position.y = radius * Math.sin(angle);
                 }),
-                new InfoWrapper<>("rainbow spiral", (position, type, nTypes) -> {
+                new InfoWrapper<PositionSetter>("rainbow spiral", (position, type, nTypes) -> {
                     double maxRotations = 2;
                     double typeSpread = 0.3 / nTypes;
                     double f = (type + 1) / (double) (nTypes + 2) + typeSpread * random.nextGaussian();
