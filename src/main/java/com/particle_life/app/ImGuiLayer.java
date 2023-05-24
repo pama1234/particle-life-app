@@ -266,16 +266,17 @@ public class ImGuiLayer{
     // set style
     final ImFontAtlas fontAtlas=io.getFonts();
     final ImFontConfig fontConfig=new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
+    fontAtlas.build();
     // int size=65536;
-    int size=1024;
-    short[] glyphRanges=new short[size];
-    // for(int i=0;i<65536;i++) glyphRanges[i]=(short)i;
-    IntStream.range(0,size)
-      .parallel()
-      .forEach(i->glyphRanges[i]=(short)i);
-    fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesChineseFull());
+    // short[] glyphRanges=new short[size];
+    // IntStream.range(0,size)
+    //   .parallel()
+    //   .forEach(i->glyphRanges[i]=(short)i);
     // fontConfig.setGlyphRanges(glyphRanges);
-    fontAtlas.addFontFromMemoryTTF(ResourceAccess.readBytes("font/unifont.ttf"),16,fontConfig);
+    fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesChineseFull());
+    fontConfig.setFontDataOwnedByAtlas(false);
+    fontAtlas.addFontFromMemoryTTF(ResourceAccess.readBytes("font/unifont.ttf"),16,fontConfig,fontConfig.getGlyphRanges());
+    fontAtlas.build();
     fontConfig.destroy(); // After all fonts were added we don't need this config more
     //---
     ImGuiStyle style=ImGui.getStyle();
