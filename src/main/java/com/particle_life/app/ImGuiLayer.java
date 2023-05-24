@@ -197,7 +197,7 @@ public class ImGuiLayer{
     // set style
     final ImFontAtlas fontAtlas=io.getFonts();
     final ImFontConfig fontConfig=new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
-    fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesCyrillic());
+    fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesChineseFull());
     fontAtlas.addFontFromFileTTF("src/main/resources/font/unifont-15.0.03.ttf",16,fontConfig);
     fontConfig.destroy(); // After all fonts were added we don't need this config more
     //---

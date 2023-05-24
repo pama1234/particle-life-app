@@ -52,20 +52,25 @@ import pama1234.Settings;
 public class Main extends App{
   private static Yaml yaml=new Yaml();
   private void saveSettings() {
-    ResourceAccess.saveTextFile(Settings.path,yaml.dump(Settings.data));
+    ResourceAccess.saveTextFile(Settings.path,yaml.dumpAsMap(Settings.data));
   }
   public static void main(String[] args) {
+    // System.out.println(ResourceAccess.readTextFileData(Settings.path));
+    // System.exit(0);
     if(new File(Settings.path).exists()) {
-      Settings.data=Settings.readFromYaml(yaml,ResourceAccess.readTextFile(Settings.path));
+      Settings.data=Settings.readFromYaml(yaml,ResourceAccess.readTextFileData(Settings.path));
     }else {
       new File("data").mkdir();
       Settings.data=new Settings();
       Settings.data.langType="zh_CN";
     }
-    // String[] settings=ResourceAccess.readTextFile("data/settings.txt").split("\n");
-    // Localization.usedLang=Localization.readFromYaml(ResourceAccess.readTextFile("bundle/zh_CN.yaml"));
     usedLang=Localization.readFromYaml(yaml,ResourceAccess.readTextFile("bundle/"+Settings.data.langType+".yaml"));
     new Main().launch(usedLang.title,true);
+  }
+  @Override
+  public void launch(String title,boolean fullscreen) {
+    super.launch(title,fullscreen);
+    saveSettings();
   }
   // data
   private final Clock renderClock=new Clock(60);
@@ -671,7 +676,6 @@ public class Main extends App{
       }
       if(ImGui.menuItem("Quit","Alt+F4")) {
         close();
-        saveSettings();
       }
       ImGui.endMenu();
     }

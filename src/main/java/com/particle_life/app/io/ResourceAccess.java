@@ -1,6 +1,7 @@
 package com.particle_life.app.io;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -22,6 +23,19 @@ public class ResourceAccess{
    */
   public static InputStream getInputStream(String path) {
     return ClassLoader.getSystemClassLoader().getResourceAsStream(path);
+  }
+  public static String readTextFileData(String path) {
+    try {
+      InputStream inputStream=new FileInputStream(path);
+      String text=new BufferedReader(new InputStreamReader(inputStream,StandardCharsets.UTF_8))
+        .lines()
+        .collect(Collectors.joining("\n"));
+      inputStream.close();
+      return text;
+    }catch(IOException e) {
+      e.printStackTrace();
+    }
+    return null;
   }
   public static String readTextFile(String path) {
     InputStream inputStream=getInputStream(path);
