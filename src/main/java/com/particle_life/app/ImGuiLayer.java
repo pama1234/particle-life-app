@@ -1,18 +1,87 @@
 package com.particle_life.app;
 
-import imgui.*;
+import static org.lwjgl.glfw.GLFW.GLFW_ARROW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_CURSOR_NORMAL;
+import static org.lwjgl.glfw.GLFW.GLFW_HAND_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_HRESIZE_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_IBEAM_CURSOR;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_BACKSPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_C;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_DELETE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_END;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_HOME;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_INSERT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_KP_ENTER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_SUPER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_PAGE_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_ALT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_CONTROL;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SHIFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT_SUPER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_TAB;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_X;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Y;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_Z;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_1;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_2;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_3;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_4;
+import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_5;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
+import static org.lwjgl.glfw.GLFW.GLFW_STICKY_KEYS;
+import static org.lwjgl.glfw.GLFW.GLFW_STICKY_MOUSE_BUTTONS;
+import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
+import static org.lwjgl.glfw.GLFW.GLFW_VRESIZE_CURSOR;
+import static org.lwjgl.glfw.GLFW.glfwCreateStandardCursor;
+import static org.lwjgl.glfw.GLFW.glfwGetClipboardString;
+import static org.lwjgl.glfw.GLFW.glfwGetCursorPos;
+import static org.lwjgl.glfw.GLFW.glfwGetMouseButton;
+import static org.lwjgl.glfw.GLFW.glfwSetCharCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetClipboardString;
+import static org.lwjgl.glfw.GLFW.glfwSetCursor;
+import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetInputMode;
+import static org.lwjgl.glfw.GLFW.glfwSetKeyCallback;
+import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
+
+import org.lwjgl.glfw.GLFWCharCallbackI;
+import org.lwjgl.glfw.GLFWCursorPosCallbackI;
+import org.lwjgl.glfw.GLFWKeyCallbackI;
+import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
+import org.lwjgl.glfw.GLFWScrollCallbackI;
+
+import com.particle_life.app.io.ResourceAccess;
+
+import imgui.ImFontAtlas;
+import imgui.ImFontConfig;
+import imgui.ImGui;
+import imgui.ImGuiIO;
+import imgui.ImGuiStyle;
 import imgui.callback.ImStrConsumer;
 import imgui.callback.ImStrSupplier;
 import imgui.flag.ImGuiBackendFlags;
 import imgui.flag.ImGuiConfigFlags;
 import imgui.flag.ImGuiKey;
 import imgui.flag.ImGuiMouseCursor;
-import org.lwjgl.glfw.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.lwjgl.glfw.GLFW.*;
 
 public class ImGuiLayer{
   private long glfwWindow;
@@ -197,8 +266,16 @@ public class ImGuiLayer{
     // set style
     final ImFontAtlas fontAtlas=io.getFonts();
     final ImFontConfig fontConfig=new ImFontConfig(); // Natively allocated object, should be explicitly destroyed
+    // int size=65536;
+    int size=1024;
+    short[] glyphRanges=new short[size];
+    // for(int i=0;i<65536;i++) glyphRanges[i]=(short)i;
+    IntStream.range(0,size)
+      .parallel()
+      .forEach(i->glyphRanges[i]=(short)i);
     fontConfig.setGlyphRanges(fontAtlas.getGlyphRangesChineseFull());
-    fontAtlas.addFontFromFileTTF("src/main/resources/font/unifont-15.0.03.ttf",16,fontConfig);
+    // fontConfig.setGlyphRanges(glyphRanges);
+    fontAtlas.addFontFromMemoryTTF(ResourceAccess.readBytes("font/unifont.ttf"),16,fontConfig);
     fontConfig.destroy(); // After all fonts were added we don't need this config more
     //---
     ImGuiStyle style=ImGui.getStyle();

@@ -72,4 +72,13 @@ public class ResourceAccess{
       e.printStackTrace();
     }
   }
+  public static byte[] readBytes(String path) {
+    try {
+      byte[] out=getInputStream(path).readAllBytes();
+      return out;
+    }catch(IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }
