@@ -1,15 +1,42 @@
 package com.particle_life.app;
 
-import com.particle_life.*;
+import static org.lwjgl.opengl.GL11.glEnable;
+import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.joml.Matrix4d;
+import org.joml.Vector2d;
+import org.joml.Vector3d;
+import org.yaml.snakeyaml.Yaml;
+
+import com.particle_life.Accelerator;
+import com.particle_life.Clock;
+import com.particle_life.LoadDistributor;
+import com.particle_life.Loop;
+import com.particle_life.Matrix;
+import com.particle_life.MatrixGenerator;
+import com.particle_life.Particle;
+import com.particle_life.PhysicsSettings;
+import com.particle_life.PositionSetter;
+import com.particle_life.TypeSetter;
 import com.particle_life.app.color.Color;
 import com.particle_life.app.color.Palette;
 import com.particle_life.app.color.PalettesProvider;
-import com.particle_life.app.cursors.*;
+import com.particle_life.app.cursors.Cursor;
+import com.particle_life.app.cursors.CursorAction;
+import com.particle_life.app.cursors.CursorActionProvider;
+import com.particle_life.app.cursors.CursorProvider;
+import com.particle_life.app.cursors.CursorShape;
+import com.particle_life.app.io.ResourceAccess;
 import com.particle_life.app.selection.SelectionManager;
 import com.particle_life.app.shaders.ParticleShader;
 import com.particle_life.app.shaders.ShaderProvider;
 import com.particle_life.app.utils.ImGuiUtils;
 import com.particle_life.app.utils.MathUtils;
+
 import imgui.ImGui;
 import imgui.flag.ImGuiCond;
 import imgui.flag.ImGuiInputTextFlags;
@@ -18,19 +45,26 @@ import imgui.flag.ImGuiWindowFlags;
 import imgui.type.ImBoolean;
 import imgui.type.ImFloat;
 import imgui.type.ImInt;
-import org.joml.Matrix4d;
-import org.joml.Vector2d;
-import org.joml.Vector3d;
-
-import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import static org.lwjgl.opengl.GL11.glEnable;
-import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import pama1234.Localization;
+import pama1234.Settings;
 
 public class Main extends App{
+  private static Yaml yaml=new Yaml();
+  private void saveSettings() {
+    ResourceAccess.saveTextFile(Settings.path,yaml.dump(Settings.data));
+  }
   public static void main(String[] args) {
-    new Main().launch("Particle Life Simulator",true);
+    if(new File(Settings.path).exists()) {
+      Settings.data=Settings.readFromYaml(yaml,ResourceAccess.readTextFile(Settings.path));
+    }else {
+      new File("data").mkdir();
+      Settings.data=new Settings();
+      Settings.data.langType="zh_CN";
+    }
+    // String[] settings=ResourceAccess.readTextFile("data/settings.txt").split("\n");
+    // Localization.usedLang=Localization.readFromYaml(ResourceAccess.readTextFile("bundle/zh_CN.yaml"));
+    Localization.usedLang=Localization.readFromYaml(yaml,ResourceAccess.readTextFile("bundle/"+Settings.data.langType+".yaml"));
+    new Main().launch(Localization.usedLang.title,true);
   }
   // data
   private final Clock renderClock=new Clock(60);
@@ -636,6 +670,7 @@ public class Main extends App{
       }
       if(ImGui.menuItem("Quit","Alt+F4")) {
         close();
+        saveSettings();
       }
       ImGui.endMenu();
     }

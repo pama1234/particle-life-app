@@ -19,6 +19,7 @@ buildscript{
 
 plugins {
   id "java"
+  id "java-library"
   id "application"                                     // for "run" task
   id 'edu.sc.seis.launch4j' version '2.5.1'            // for generating .exe
   id 'org.beryx.runtime' version '1.12.7'              // for generating JRE
@@ -156,7 +157,7 @@ repositories {
 
 dependencies {
 
-  implementation "com.github.tom-mohr:particle-life:v0.2.0"
+  implementation "com.github.pama1234:particle-life:$particleLifeVersion"
 
   // YamlBeans for parsing YAML files conveniently
   implementation 'com.esotericsoftware.yamlbeans:yamlbeans:1.15'
@@ -173,6 +174,8 @@ dependencies {
   [".lwjgl", ".glfw", ".opengl"].each {
     implementation "org.lwjgl.osgi:org.lwjgl$it:$lwjglVersion"
   }
+
+  compileOnlyApi 'org.yaml:snakeyaml:2.0'
 }
 
 apply plugin: "com.diffplug.spotless"

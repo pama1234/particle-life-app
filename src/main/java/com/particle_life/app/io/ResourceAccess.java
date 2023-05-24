@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ public class ResourceAccess{
   }
   public static String readTextFile(String path) {
     InputStream inputStream=getInputStream(path);
-    String text=new BufferedReader(new InputStreamReader(inputStream))
+    String text=new BufferedReader(new InputStreamReader(inputStream,StandardCharsets.UTF_8))
       .lines()
       .collect(Collectors.joining("\n"));
     try {
@@ -48,5 +49,8 @@ public class ResourceAccess{
     return Files.walk(path,1)
       .skip(1) // first entry is just the directory
       .collect(Collectors.toList());
+  }
+  public static void saveTextFile(String path,String data) {
+    
   }
 }
