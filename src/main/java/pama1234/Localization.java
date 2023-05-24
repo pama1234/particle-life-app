@@ -9,4 +9,5 @@ public class Localization{
     return yaml.loadAs(in,Localization.class);
   }
   public String title;
+  public String graphicsFps,physicsFps;
 }

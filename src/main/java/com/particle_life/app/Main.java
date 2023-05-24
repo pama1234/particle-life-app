@@ -2,6 +2,7 @@ package com.particle_life.app;
 
 import static org.lwjgl.opengl.GL11.glEnable;
 import static org.lwjgl.opengl.GL13.GL_MULTISAMPLE;
+import static pama1234.Localization.usedLang;
 
 import java.io.File;
 import java.util.Arrays;
@@ -63,8 +64,8 @@ public class Main extends App{
     }
     // String[] settings=ResourceAccess.readTextFile("data/settings.txt").split("\n");
     // Localization.usedLang=Localization.readFromYaml(ResourceAccess.readTextFile("bundle/zh_CN.yaml"));
-    Localization.usedLang=Localization.readFromYaml(yaml,ResourceAccess.readTextFile("bundle/"+Settings.data.langType+".yaml"));
-    new Main().launch(Localization.usedLang.title,true);
+    usedLang=Localization.readFromYaml(yaml,ResourceAccess.readTextFile("bundle/"+Settings.data.langType+".yaml"));
+    new Main().launch(usedLang.title,true);
   }
   // data
   private final Clock renderClock=new Clock(60);
@@ -300,8 +301,8 @@ public class Main extends App{
         ImGui.pushItemWidth(200);
         {
           statsFormatter.start();
-          statsFormatter.put("Graphics FPS",String.format("%.0f",renderClock.getAvgFramerate()));
-          statsFormatter.put("Physics FPS",loop.getAvgFramerate()<100000?String.format("%.0f",loop.getAvgFramerate()):"inf");
+          statsFormatter.put(usedLang.graphicsFps,String.format("%.0f",renderClock.getAvgFramerate()));
+          statsFormatter.put(usedLang.physicsFps,loop.getAvgFramerate()<100000?String.format("%.0f",loop.getAvgFramerate()):"inf");
           if(advancedGui) {
             statsFormatter.put("Physics vs. Graphics",loop.getAvgFramerate()<100000?String.format("%.2f",loop.getAvgFramerate()/renderClock.getAvgFramerate()):"inf");
             //todo display when functional: statsFormatter.put("Particles in Cursor", String.valueOf(cursorParticleCount));

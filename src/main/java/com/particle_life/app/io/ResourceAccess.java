@@ -51,6 +51,11 @@ public class ResourceAccess{
       .collect(Collectors.toList());
   }
   public static void saveTextFile(String path,String data) {
-    
+    try {
+      Path outputPath=Paths.get(path);
+      Files.write(outputPath,data.getBytes(StandardCharsets.UTF_8));
+    }catch(IOException e) {
+      e.printStackTrace();
+    }
   }
 }

@@ -1,1 +1,3 @@
 title: 粒子生命模拟器
+graphicsFps: 帧率(FPS)
+physicsFps: 物理引擎刷新率
