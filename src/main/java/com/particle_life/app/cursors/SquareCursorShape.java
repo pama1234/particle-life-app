@@ -15,6 +15,8 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import org.joml.Vector3f;
 
+import pama1234.math.UtilMath;
+
 public class SquareCursorShape extends CursorShape{
   private int vertexArray;
   @Override
@@ -45,6 +47,6 @@ public class SquareCursorShape extends CursorShape{
   }
   @Override
   Vector3f sampleRandomPoint() {
-    return new Vector3f((float)(2*Math.random()-1),(float)(2*Math.random()-1),0);
+    return new Vector3f(2*UtilMath.random()-1,2*UtilMath.random()-1,0);
   }
 }

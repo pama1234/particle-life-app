@@ -762,9 +762,9 @@ public class Main extends App{
     particleShader.setDetail(MathUtils.constrain(getDetailFromZoom(),ParticleShader.MIN_DETAIL,ParticleShader.MAX_DETAIL));
   }
   private int getDetailFromZoom() {
-    double particleSizeOnScreen=keepParticleSizeIndependentOfZoom?particleSize:particleSize*zoom;
-    double minDetailSize=4; // at this size, the detail is 4
-    double detailPerSize=0.4;// from then on, the detail increases with this rate (per size on screen in pixels)
+    float particleSizeOnScreen=keepParticleSizeIndependentOfZoom?particleSize:particleSize*zoom;
+    float minDetailSize=4f; // at this size, the detail is 4
+    float detailPerSize=0.4f;// from then on, the detail increases with this rate (per size on screen in pixels)
     if(particleSizeOnScreen<minDetailSize) {
       return 4;
     }else {

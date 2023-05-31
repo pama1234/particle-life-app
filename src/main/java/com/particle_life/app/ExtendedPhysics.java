@@ -26,7 +26,7 @@ class ExtendedPhysics extends Physics{
     int nTypes=settings.matrix.size();
     if(nTypes<2) return;
     int[] idealTypeCount=new int[nTypes];
-    int count=(int)Math.ceil(particles.length/(double)nTypes);
+    int count=(int)Math.ceil(particles.length/(float)nTypes);
     Arrays.fill(idealTypeCount,0,nTypes-1,count);
     idealTypeCount[nTypes-1]=particles.length-(nTypes-1)*(count);
     setTypeCount(idealTypeCount);

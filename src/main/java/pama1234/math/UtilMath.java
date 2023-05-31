@@ -1,6 +1,11 @@
 package pama1234.math;
 
+import java.util.Random;
+
 public class UtilMath{
+  private static final class RandomNumberGeneratorHolder{
+    static final Random randomNumberGenerator=new Random();
+  }
   public static final float radDeg=(float)(180./Math.PI);
   public static final float degRad=(float)(Math.PI/180.);
   public static final float PI=(float)Math.PI;
@@ -139,7 +144,7 @@ public class UtilMath{
   public static float dot(float x,float y,float z,float x2,float y2,float z2) {
     return x*x2+y*y2+z*z2;
   }
-  public static float atanUnchecked(double i) {
+  public static float atanUnchecked(float i) {
     // We use double precision internally, because some constants need double precision.
     double n=Math.abs(i);
     // c uses the "equally-good" formulation that permits n to be from 0 to almost infinity.
@@ -228,5 +233,8 @@ public class UtilMath{
   }
   public static float exp(float in) {
     return (float)Math.exp(in);
+  }
+  public static float random() {
+    return RandomNumberGeneratorHolder.randomNumberGenerator.nextFloat();
   }
 }

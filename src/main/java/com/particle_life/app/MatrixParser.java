@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public final class MatrixParser{
-  private interface DoubleEncoder{
-    String encode(double f);
+  private interface FloatEncoder{
+    String encode(float f);
   }
-  private static final DoubleEncoder doubleEncoderDefault=f->String.format(Locale.US,"%f",f);
-  private static final DoubleEncoder doubleEncoderRoundAndFormat=f->String.format(Locale.US,"%4.1f",f);
+  private static final FloatEncoder floatEncoderDefault=f->String.format(Locale.US,"%f",f);
+  private static final FloatEncoder floatEncoderRoundAndFormat=f->String.format(Locale.US,"%4.1f",f);
   /**
    * Expects input to look like this:<br>
    * <br>
@@ -48,19 +48,19 @@ public final class MatrixParser{
     return matrix;
   }
   public static String matrixToString(Matrix matrix) {
-    return matrixToString(matrix,doubleEncoderDefault);
+    return matrixToString(matrix,floatEncoderDefault);
   }
   public static String matrixToStringRoundAndFormat(Matrix matrix) {
-    return matrixToString(matrix,doubleEncoderRoundAndFormat);
+    return matrixToString(matrix,floatEncoderRoundAndFormat);
   }
-  private static String matrixToString(Matrix matrix,DoubleEncoder doubleEncoder) {
+  private static String matrixToString(Matrix matrix,FloatEncoder floatEncoder) {
     StringBuilder sb=new StringBuilder();
     for(int i=0;i<matrix.size();i++) {
       for(int j=0;j<matrix.size()-1;j++) {
-        sb.append(doubleEncoder.encode(matrix.get(i,j)));
+        sb.append(floatEncoder.encode(matrix.get(i,j)));
         sb.append(" ");
       }
-      sb.append(doubleEncoder.encode(matrix.get(i,matrix.size()-1)));
+      sb.append(floatEncoder.encode(matrix.get(i,matrix.size()-1)));
       sb.append("\n");
     }
     return sb.toString();

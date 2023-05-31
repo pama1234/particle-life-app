@@ -24,9 +24,9 @@ public class CircleCursorShape extends CursorShape{
   protected void onInitialize() {
     final float[] vertexData=new float[NUM_SEGMENTS*2];
     for(int i=0;i<NUM_SEGMENTS;i++) {
-      double angle=2*Math.PI*i/(float)NUM_SEGMENTS;
-      double x=Math.cos(angle);
-      double y=Math.sin(angle);
+      float angle=2*UtilMath.PI*i/(float)NUM_SEGMENTS;
+      float x=UtilMath.cos(angle);
+      float y=UtilMath.sin(angle);
       vertexData[2*i]=(float)x;
       vertexData[2*i+1]=(float)y;
     }
@@ -40,7 +40,7 @@ public class CircleCursorShape extends CursorShape{
   }
   @Override
   boolean isInside(Vector3f connection) {
-    return connection.length()<=1.0;
+    return connection.length()<=1f;
   }
   @Override
   void draw() {
@@ -49,8 +49,8 @@ public class CircleCursorShape extends CursorShape{
   }
   @Override
   Vector3f sampleRandomPoint() {
-    float angle=(float)(Math.random()*2*Math.PI);
+    float angle=UtilMath.random()*2*UtilMath.PI;
     return new Vector3f(UtilMath.cos(angle),UtilMath.sin(angle),0)
-      .mul(UtilMath.sqrt((float)Math.random()));
+      .mul(UtilMath.sqrt(UtilMath.random()));
   }
 }
