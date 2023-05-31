@@ -10,7 +10,7 @@ public final class MathUtils{
       return value;
     }
   }
-  public static double constrain(double value,double min,double max) {
+  public static float constrain(float value,float min,float max) {
     if(value<min) {
       return min;
     }else if(value>max) {
@@ -33,7 +33,7 @@ public final class MathUtils{
     }
     return a;
   }
-  public static double lerp(double a,double b,double f) {
+  public static float lerp(float a,float b,float f) {
     return a+(b-a)*f;
   }
   /**
@@ -44,23 +44,23 @@ public final class MathUtils{
    * @param threshold some positive value like 0.001
    * @return an integer
    */
-  public static double tolerantFloor(double value,double threshold) {
-    double x=Math.round(value);
+  public static float tolerantFloor(float value,float threshold) {
+    float x=Math.round(value);
     if(Math.abs(x-value)<threshold) {
       return x;
     }
-    return Math.floor(value);
+    return (float)Math.floor(value);
   }
   /**
-   * See comment on {@link #tolerantFloor(double, double)}.
+   * See comment on {@link #tolerantFloor(float, float)}.
    *
    * @param value
    * @param threshold
    * @return
    */
-  public static double tolerantCeil(double value,double threshold) {
-    double x=Math.round(value);
+  public static float tolerantCeil(float value,float threshold) {
+    float x=Math.round(value);
     if(Math.abs(x-value)<threshold) return x;
-    return Math.ceil(value);
+    return (float)Math.ceil(value);
   }
 }

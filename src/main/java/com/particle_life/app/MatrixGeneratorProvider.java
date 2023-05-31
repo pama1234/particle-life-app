@@ -43,7 +43,7 @@ class MatrixGeneratorProvider implements InfoWrapperProvider<MatrixGenerator>{
             if(j==i) {
               m.set(i,j,1);
             }else if(j==(i+1)%size||j==(i+size-1)%size) {
-              m.set(i,j,0.2);
+              m.set(i,j,0.2f);
             }else {
               m.set(i,j,-1);
             }
@@ -58,7 +58,7 @@ class MatrixGeneratorProvider implements InfoWrapperProvider<MatrixGenerator>{
             if(j==i) {
               m.set(i,j,1);
             }else if(j==(i+1)%size||j==(i+size-1)%size) {
-              m.set(i,j,0.2);
+              m.set(i,j,0.2f);
             }else {
               m.set(i,j,0);
             }
@@ -70,7 +70,7 @@ class MatrixGeneratorProvider implements InfoWrapperProvider<MatrixGenerator>{
         DefaultMatrix m=new DefaultMatrix(size);
         for(int i=0;i<size;i++) {
           m.set(i,i,1);
-          m.set(i,(i+1)%m.size(),0.2);
+          m.set(i,(i+1)%m.size(),0.2f);
         }
         return m;
       }),

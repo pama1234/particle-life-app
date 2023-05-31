@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.joml.Matrix4d;
-import org.joml.Vector2d;
-import org.joml.Vector3d;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.yaml.snakeyaml.Yaml;
 
 import com.particle_life.Accelerator;
@@ -48,6 +48,7 @@ import imgui.type.ImFloat;
 import imgui.type.ImInt;
 import pama1234.Localization;
 import pama1234.Settings;
+import pama1234.math.UtilMath;
 
 public class Main extends App{
   private static Yaml yaml=new Yaml();
@@ -90,7 +91,7 @@ public class Main extends App{
   private ExtendedPhysics physics;
   private Loop loop;
   private boolean autoDt=true;
-  private double fallbackDt=0.02;
+  private float fallbackDt=0.02f;
   private PhysicsSnapshot physicsSnapshot;
   private final LoadDistributor physicsSnapshotLoadDistributor=new LoadDistributor(); // speed up taking snapshots with parallelization
   public AtomicBoolean newSnapshotAvailable=new AtomicBoolean(false);
@@ -100,19 +101,19 @@ public class Main extends App{
   private int preferredNumberOfThreads;
   private int cursorParticleCount=0;
   // particle rendering: constants
-  private double zoomStepFactor=1.2;
+  private float zoomStepFactor=1.2f;
   private float particleSize=4.0f; // particle size on screen (in pixels)
   private boolean keepParticleSizeIndependentOfZoom=false;
-  private double shiftSmoothness=0.3;
-  private double zoomSmoothness=0.3;
-  private double camMovementSpeed=1.0;
+  private float shiftSmoothness=0.3f;
+  private float zoomSmoothness=0.3f;
+  private float camMovementSpeed=1.0f;
   // particle rendering: controls
   private boolean traces=false;
-  private final Vector3d shift=new Vector3d(0);
-  private final Vector3d shiftGoal=new Vector3d(shift);
-  private final double MIN_ZOOM=0.1;
-  private double zoom=1;
-  private double zoomGoal=zoom;
+  private final Vector3f shift=new Vector3f(0);
+  private final Vector3f shiftGoal=new Vector3f(shift);
+  private final float MIN_ZOOM=0.1f;
+  private float zoom=1;
+  private float zoomGoal=zoom;
   boolean draggingShift=false;
   boolean draggingParticles=false;
   boolean leftPressed=false;
@@ -128,7 +129,7 @@ public class Main extends App{
   private float guiBackgroundAlpha=1.0f;
   // GUI: constants that control how the GUI behaves
   private long physicsNotReactingThreshold=3000; // time in milliseconds
-  private double matrixGuiStepSize=0.2;
+  private float matrixGuiStepSize=0.2f;
   private int typeCountDiagramStepSize=500;
   private boolean typeCountDisplayPercentage=false;
   // GUI: hide / show parts
@@ -189,24 +190,24 @@ public class Main extends App{
     renderer.dispose();
   }
   @Override
-  protected void draw(double dt) {
+  protected void draw(float dt) {
     renderClock.tick();
     // util object for later use
     Coordinates coordinates=new Coordinates(width,height,shift,zoom);
     // set cursor position and size
-    Vector3d cursorWorldCoordinates=coordinates.world(mouseX,mouseY);
+    Vector3f cursorWorldCoordinates=coordinates.world(mouseX,mouseY);
     cursor.position.set(cursorWorldCoordinates);
     if(draggingShift) {
       shift.set(coordinates
-        .mouseShift(new Vector2d(pmouseX,pmouseY),new Vector2d(mouseX,mouseY)).shift);
+        .mouseShift(new Vector2f(pmouseX,pmouseY),new Vector2f(mouseX,mouseY)).shift);
       shiftGoal.set(shift); // don't use smoothing while dragging
     }
-    double camMovementStepSize=camMovementSpeed/zoom;
+    float camMovementStepSize=camMovementSpeed/zoom;
     camMovementStepSize*=renderClock.getDtMillis()/1000.0; // keep constant speed regardless of framerate
-    if(leftPressed) shiftGoal.add(camMovementStepSize,0.0,0.0);
-    if(rightPressed) shiftGoal.add(-camMovementStepSize,0.0,0.0);
-    if(upPressed) shiftGoal.add(0.0,camMovementStepSize,0.0);
-    if(downPressed) shiftGoal.add(0.0,-camMovementStepSize,0.0);
+    if(leftPressed) shiftGoal.add(camMovementStepSize,0.0f,0.0f);
+    if(rightPressed) shiftGoal.add(-camMovementStepSize,0.0f,0.0f);
+    if(upPressed) shiftGoal.add(0.0f,camMovementStepSize,0.0f);
+    if(downPressed) shiftGoal.add(0.0f,-camMovementStepSize,0.0f);
     shift.lerp(shiftGoal,shiftSmoothness);
     zoom=MathUtils.lerp(zoom,zoomGoal,zoomSmoothness);
     if(draggingParticles) {
@@ -214,10 +215,10 @@ public class Main extends App{
       // execute cursor action
       switch(cursorActions.getActive()) {
         case MOVE-> {
-          final Vector3d wPrev=coordinates.world(pmouseX,pmouseY); // where the dragging started
-          final Vector3d wNew=coordinates.world(mouseX,mouseY); // where the dragging ended
-          final Vector3d delta=wNew.sub(wPrev); // dragged distance
-          cursorCopy.position.set(wPrev.x,wPrev.y,0.0); // set cursor to start of dragging
+          final Vector3f wPrev=coordinates.world(pmouseX,pmouseY); // where the dragging started
+          final Vector3f wNew=coordinates.world(mouseX,mouseY); // where the dragging ended
+          final Vector3f delta=wNew.sub(wPrev); // dragged distance
+          cursorCopy.position.set(wPrev.x,wPrev.y,0.0f); // set cursor to start of dragging
           loop.enqueue(()-> {
             for(Particle p:cursorCopy.getSelection(physics)) {
               p.position.add(delta);
@@ -443,7 +444,7 @@ public class Main extends App{
               frictionSliderValue,0.0f,1.0f,
               String.format("%4.0f ms",settings.velocityHalfLife*1000),
               ImGuiSliderFlags.Logarithmic)) {
-              final double newVelocityHalfLife=frictionSliderValue[0];
+              final float newVelocityHalfLife=frictionSliderValue[0];
               loop.enqueue(()->physics.settings.velocityHalfLife=newVelocityHalfLife);
             }
             ImGui.sameLine();
@@ -572,14 +573,14 @@ public class Main extends App{
         {
           float[] inputValue=new float[] {(float)(1.0-zoomSmoothness)};
           if(ImGui.sliderFloat("Cam Smoothing",inputValue,0.0f,1.0f,"%0.2f")) {
-            zoomSmoothness=1.0-inputValue[0];
-            shiftSmoothness=1.0-inputValue[0];
+            zoomSmoothness=1.0f-inputValue[0];
+            shiftSmoothness=1.0f-inputValue[0];
           }
         }
         {
           float[] inputValue=new float[] {(float)(zoomStepFactor-1)*100};
           if(ImGui.sliderFloat("Zoom Step",inputValue,0.0f,100.0f,"%.1f%%",ImGuiSliderFlags.Logarithmic)) {
-            zoomStepFactor=1+inputValue[0]*0.01;
+            zoomStepFactor=1+inputValue[0]*0.01f;
           }
         }
         if(ImGui.checkbox("make particle size zoom-independent",keepParticleSizeIndependentOfZoom)) {
@@ -696,7 +697,7 @@ public class Main extends App{
         if(ImGui.menuItem("Fit","Z")) {
           resetCamera(true);
           // zoom to fit larger dimension
-          zoomGoal=Math.max(width,height)/(double)Math.min(width,height);
+          zoomGoal=Math.max(width,height)/(float)Math.min(width,height);
         }
         ImGui.endMenu();
       }
@@ -796,12 +797,12 @@ public class Main extends App{
       case "s"->shaders.stepForward();
       case "S"->shaders.stepBackward();
       case "+","="->zoomGoal*=Math.pow(zoomStepFactor,2);// more steps than when scrolling
-      case "-"->zoomGoal=Math.max(MIN_ZOOM,zoomGoal/Math.pow(zoomStepFactor,2));
+      case "-"->zoomGoal=Math.max(MIN_ZOOM,zoomGoal/UtilMath.pow(zoomStepFactor,2));
       case "z"->resetCamera(true);
       case "Z"-> {
         resetCamera(true);
         // zoom to fit larger dimension
-        zoomGoal=Math.max(width,height)/(double)Math.min(width,height);
+        zoomGoal=Math.max(width,height)/(float)Math.min(width,height);
       }
       case "p"->loop.enqueue(physics::setPositions);
       case "t"->loop.enqueue(()-> {
@@ -875,7 +876,7 @@ public class Main extends App{
     }
   }
   @Override
-  protected void onScroll(double y) {
+  protected void onScroll(float y) {
     boolean controlPressed=leftControlPressed||rightControlPressed;
     boolean shiftPressed=leftShiftPressed||rightShiftPressed;
     boolean bothPressed=controlPressed&&shiftPressed;
@@ -889,9 +890,9 @@ public class Main extends App{
       cursor.size*=Math.pow(1.2,-y);
     }else {
       // change camera zoom
-      double zoomIncrease=Math.pow(zoomStepFactor,y);
+      float zoomIncrease=UtilMath.pow(zoomStepFactor,y);
       Coordinates c=new Coordinates(width,height,shiftGoal,zoomGoal); // use "goal" shift and zoom
-      c.zoomInOnMouse(new Vector2d(mouseX,mouseY),Math.max(MIN_ZOOM,zoomGoal*zoomIncrease));
+      c.zoomInOnMouse(new Vector2f(mouseX,mouseY),UtilMath.max(MIN_ZOOM,zoomGoal*zoomIncrease));
       zoomGoal=c.zoom;
       shiftGoal.set(c.shift);
     }

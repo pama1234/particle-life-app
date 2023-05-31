@@ -1,21 +1,22 @@
 package com.particle_life.app.cursors;
 
-import com.particle_life.Particle;
-import com.particle_life.Physics;
-import com.particle_life.app.shaders.CursorShader;
-import org.joml.Matrix4d;
-import org.joml.Vector3d;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Matrix4d;
+import org.joml.Vector3f;
+
+import com.particle_life.Particle;
+import com.particle_life.Physics;
+import com.particle_life.app.shaders.CursorShader;
+
 public class Cursor{
-  public Vector3d position=new Vector3d(0,0,0);
-  public double size=0.1;
+  public Vector3f position=new Vector3f(0,0,0);
+  public float size=0.1f;
   public CursorShape shape;
   private CursorShader cursorShader;
   public boolean isInside(Particle particle,Physics physics) {
-    if(size==0.0) return false;
+    if(size==0.0f) return false;
     return shape.isInside(physics.connection(position,particle.position).div(size));
   }
   public List<Particle> getSelection(Physics physics) {
@@ -34,8 +35,8 @@ public class Cursor{
     if(!shape.isInitialized()) shape.initialize(); // lazy initialize shapes (register VBOs etc. for drawing)
     shape.draw();
   }
-  public Vector3d sampleRandomPoint() {
-    return shape.sampleRandomPoint().mul(size).add(position);
+  public Vector3f sampleRandomPoint() {
+    return new Vector3f(shape.sampleRandomPoint().mul(size).add(position));
   }
   public Cursor copy() {
     Cursor c=new Cursor();

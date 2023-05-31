@@ -1,8 +1,8 @@
 package com.particle_life.app.cursors;
 
-import org.joml.Vector3d;
-
 import java.lang.reflect.InvocationTargetException;
+
+import org.joml.Vector3f;
 
 /**
  * Describes the shape of a cursor.
@@ -23,9 +23,9 @@ public abstract class CursorShape{
   protected void onInitialize() {
     // may be overridden
   }
-  abstract boolean isInside(Vector3d connection);
+  abstract boolean isInside(Vector3f connection);
   abstract void draw();
-  abstract Vector3d sampleRandomPoint();
+  abstract Vector3f sampleRandomPoint();
   public CursorShape copy() {
     return makeNewInstance();
   }

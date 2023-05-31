@@ -61,7 +61,6 @@ import static org.lwjgl.glfw.GLFW.glfwSetScrollCallback;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import org.lwjgl.glfw.GLFWCharCallbackI;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;

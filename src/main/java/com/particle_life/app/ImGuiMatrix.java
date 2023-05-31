@@ -15,7 +15,7 @@ class ImGuiMatrix{
     /**
      * @param newValue is guaranteed to be in [-1, 1].
      */
-    void set(int i,int j,double newValue);
+    void set(int i,int j,float newValue);
   }
   /**
    * @param w
@@ -25,7 +25,7 @@ class ImGuiMatrix{
    * @param matrix
    * @return field of matrix that is hovered by mouse or null
    */
-  public static Vector2i draw(float w,float h,Palette palette,double stepSize,Matrix matrix,SetCallback setCallback) {
+  public static Vector2i draw(float w,float h,Palette palette,float stepSize,Matrix matrix,SetCallback setCallback) {
     boolean hovering=false;
     int iHovering=0;
     int jHovering=0;
@@ -64,13 +64,13 @@ class ImGuiMatrix{
       }
     }
     if(hovering) {
-      double previousValue=matrix.get(iHovering,jHovering);
-      double val=previousValue;
+      float previousValue=matrix.get(iHovering,jHovering);
+      float val=previousValue;
       if(ImGui.isMouseClicked(0,true)) {
-        val=MathUtils.tolerantFloor((previousValue+stepSize)/stepSize,0.001)*stepSize;
+        val=MathUtils.tolerantFloor((previousValue+stepSize)/stepSize,0.001f)*stepSize;
       }
       if(ImGui.isMouseClicked(1,true)) {
-        val=MathUtils.tolerantCeil((previousValue-stepSize)/stepSize,0.001)*stepSize;
+        val=MathUtils.tolerantCeil((previousValue-stepSize)/stepSize,0.001f)*stepSize;
       }
       if(ImGui.isMouseClicked(2)) {
         val=0;

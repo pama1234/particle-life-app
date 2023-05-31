@@ -18,10 +18,10 @@ public abstract class App{
   protected long window;
   protected int width;
   protected int height;
-  protected double mouseX=-1;
-  protected double mouseY=-1;
-  protected double pmouseX=mouseX;// previous mouse position
-  protected double pmouseY=mouseY;
+  protected float mouseX=-1;
+  protected float mouseY=-1;
+  protected float pmouseX=mouseX;// previous mouse position
+  protected float pmouseY=mouseY;
   // global scaling of GUI -> apply this to window sizes etc.
   protected float scale=1.0f;
   // remember window position and size before switching to fullscreen
@@ -53,7 +53,7 @@ public abstract class App{
       pmouseY=mouseY;
       glfwPollEvents();
       imGuiLayer.processEvents();
-      double dt=guiClock.getDtMillis()/1000.0;
+      float dt=(float)(guiClock.getDtMillis()/1000.0);
       imGuiLayer.setIO((float)dt,width,height);
       draw(dt);
       glfwSwapBuffers(window); // swap the color buffers
@@ -90,7 +90,7 @@ public abstract class App{
     int monitorWidth=videoMode.width();
     int monitorHeight=videoMode.height();
     // set reasonable defaults for window position and size
-    double f=0.2;
+    float f=0.2f;
     windowPosX=(int)(f*monitorWidth/2);
     windowPosY=(int)(f*monitorHeight/2);
     windowWidth=(int)((1-f)*monitorWidth);
@@ -161,8 +161,8 @@ public abstract class App{
       }
     });
     imGuiLayer.cursorPosCallbacks.add((window1,xpos,ypos)-> {
-      mouseX=xpos;
-      mouseY=ypos;
+      mouseX=(float)xpos;
+      mouseY=(float)ypos;
     });
     imGuiLayer.mouseButtonCallbacks.add((window1,button,action,mods)-> {
       switch(action) {
@@ -171,7 +171,7 @@ public abstract class App{
       }
     });
     imGuiLayer.scrollCallbacks.add((window1,xoffset,yoffset)-> {
-      this.onScroll(yoffset);
+      this.onScroll((float)yoffset);
     });
   }
   protected boolean isFullscreen() {
@@ -218,7 +218,7 @@ public abstract class App{
    *
    * @param dt elapsed time since last call in seconds
    */
-  protected void draw(double dt) {}
+  protected void draw(float dt) {}
   protected void onKeyPressed(String keyName) {}
   protected void onKeyRepeated(String keyName) {}
   protected void onKeyReleased(String keyName) {}
@@ -229,6 +229,6 @@ public abstract class App{
    */
   protected void onMousePressed(int button) {}
   protected void onMouseReleased(int button) {}
-  protected void onScroll(double y) {}
+  protected void onScroll(float y) {}
   protected void beforeClose() {}
 }

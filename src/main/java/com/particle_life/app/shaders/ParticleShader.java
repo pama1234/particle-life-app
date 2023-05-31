@@ -1,9 +1,18 @@
 package com.particle_life.app.shaders;
 
-import com.particle_life.app.color.Color;
+import static org.lwjgl.opengl.GL11.GL_NO_ERROR;
+import static org.lwjgl.opengl.GL11.glGetError;
+import static org.lwjgl.opengl.GL20.glGetAttribLocation;
+import static org.lwjgl.opengl.GL20.glGetUniformLocation;
+import static org.lwjgl.opengl.GL20.glUniform1f;
+import static org.lwjgl.opengl.GL20.glUniform1i;
+import static org.lwjgl.opengl.GL20.glUniform4fv;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.glUseProgram;
+
 import org.joml.Matrix4d;
 
-import static org.lwjgl.opengl.GL20.*;
+import com.particle_life.app.color.Color;
 
 /**
  * Represents data about a particle shader.
